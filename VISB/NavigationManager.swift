@@ -9,7 +9,6 @@ import Foundation
 class NavigationManager {
     static let shared = NavigationManager()
 
-    // Simulated navigation data with Google Maps-like directions
     func fetchNavigationData(start: String, destination: String, completion: @escaping ([String: Any]) -> Void) {
         let mockData: [String: Any] = [
             "route": [
@@ -25,24 +24,16 @@ class NavigationManager {
             "commute_time": "10 minutes"
         ]
 
-        // Simulate network delay
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             completion(mockData)
         }
     }
 
-    // Convert navigation data into Google Maps-like instructions
     func convertToGoogleMapsInstructions(data: [String: Any]) -> String {
         guard let route = data["route"] as? [[String: Any]] else {
             return "No route data available."
         }
 
-        var instructions = ""
-        for step in route {
-            if let instruction = step["instruction"] as? String {
-                instructions += "\(instruction)\n\n"
-            }
-        }
-        return instructions
+        return route.compactMap { $0["instruction"] as? String }.joined(separator: "\n\n")
     }
 }
