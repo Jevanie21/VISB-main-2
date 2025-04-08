@@ -21,8 +21,8 @@ struct NavigationView: View {
     @State private var routeSteps: [[String: Any]] = []
     @State private var isNavigating: Bool = false
     @State private var timer: Timer?
-    @State private var selectedDestination: String = "LKD"
-    @State private var selectedStartLocation: String = "Mackey"
+    @State private var selectedDestination: String = "Smart Room 2006" // Hardcoded destination
+    @State private var selectedStartLocation: String = "Reading Room" // Hardcoded start location
     @State private var commuteTime: String = ""
     @State private var walkingImage: String = "figure.walk"
     @State private var walkingDirection: String = "arrow.up"
@@ -35,8 +35,8 @@ struct NavigationView: View {
         var coordinate: CLLocationCoordinate2D
     }
 
-    let destinations = ["LKD", "Howard Hospital", "Howard Law School", "Howard Chapel", "Howard Engineering Building"]
-    let startLocations = ["Mackey", "LKD"]
+    let destinations = ["Reading Room", "Howard Hospital", "Howard Law School", "Howard Chapel", "Howard Engineering Building", "Smart Room 2006"]
+    let startLocations = ["Smart Room 2006", "LKD", "Reading Room"]
 
     var body: some View {
         VStack {
@@ -94,21 +94,26 @@ struct NavigationView: View {
                 }
             }
 
-            Picker("Select Start Location", selection: $selectedStartLocation) {
-                ForEach(startLocations, id: \ .self) { location in
-                    Text(location).tag(location)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .padding()
+            // Removed Pickers as the start and destination are hardcoded
+            // Picker("Select Start Location", selection: $selectedStartLocation) {
+            //     ForEach(startLocations, id: \ .self) { location in
+            //         Text(location).tag(location)
+            //     }
+            // }
+            // .pickerStyle(MenuPickerStyle())
+            // .padding()
+            Text("Starting from: \(selectedStartLocation)")
+                .padding(.top)
 
-            Picker("Select Destination", selection: $selectedDestination) {
-                ForEach(destinations, id: \ .self) { destination in
-                    Text(destination).tag(destination)
-                }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .padding()
+            // Picker("Select Destination", selection: $selectedDestination) {
+            //     ForEach(destinations, id: \ .self) { destination in
+            //         Text(destination).tag(destination)
+            //     }
+            // }
+            // .pickerStyle(MenuPickerStyle())
+            // .padding()
+            Text("Going to: \(selectedDestination)")
+                .padding(.bottom)
 
             Button(action: startNavigation) {
                 Text(isNavigating ? "Stop Navigation" : "Start Navigation from \(selectedStartLocation) to \(selectedDestination)")
@@ -122,8 +127,9 @@ struct NavigationView: View {
         }
         .onAppear { fetchNavigationData() }
         .onDisappear { stopNavigation() }
-        .onChange(of: selectedDestination) { _, _ in fetchNavigationData() }
-        .onChange(of: selectedStartLocation) { _, _ in fetchNavigationData() }
+        // Removed onChange modifiers as the start and destination are hardcoded
+        // .onChange(of: selectedDestination) { _, _ in fetchNavigationData() }
+        // .onChange(of: selectedStartLocation) { _, _ in fetchNavigationData() }
     }
 
     private func fetchNavigationData() {
